@@ -37,8 +37,8 @@ const Login = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin}>
+      <div className="flex flex-col items-center my-4">
         <input
           type="email"
           placeholder="email"
@@ -56,10 +56,11 @@ const Login = () => {
         />
 
         <button>Login</button>
-      </form>
-      {error && "Error"}
-      <Link href="/dashboard/signup">Dont have an account?</Link>
-    </div>
+
+        {error && "Error"}
+        <Link href="/dashboard/signup">Dont have an account?</Link>
+      </div>
+    </form>
   );
 };
 

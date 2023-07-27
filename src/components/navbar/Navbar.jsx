@@ -8,15 +8,15 @@ const Navbar = () => {
   const session = useSession();
 
   return (
-    <div>
+    <div className="flex justify-between w-100 mx-6">
       <Link href="/">TodoS</Link>
-      <div>
+      <div className="flex gap-4">
         <Link href="/">Home</Link>
         <Link href="/dashboard">Dashboard</Link>
+        {session && session.status === "authenticated" && (
+          <button onClick={signOut}>Logout</button>
+        )}
       </div>
-      {session && session.status === "authenticated" && (
-        <button onClick={signOut}>Logout</button>
-      )}
     </div>
   );
 };

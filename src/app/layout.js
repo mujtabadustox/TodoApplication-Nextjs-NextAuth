@@ -13,10 +13,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="bg-[url('/assets/images/image.webp')] bg-cover bg-opacity-30">
         <AuthProvider>
-          <div className="container">
-            <Navbar />
+          <Navbar />
+          <div className="flex flex-1 justify-center items-center min-h-screen">
             {children}
           </div>
         </AuthProvider>

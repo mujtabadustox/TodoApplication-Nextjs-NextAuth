@@ -21,6 +21,11 @@ export const POST = async (request) => {
       status: 200,
     });
   } catch (err) {
+    if (err?.code === 11000) {
+      return new NextResponse("Duplicate", {
+        status: 400,
+      });
+    }
     return new NextResponse(err.message, {
       status: 500,
     });

@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const todoSchema = new Schema(
   {
-    name: {
+    email: {
       type: String,
       required: true,
     },

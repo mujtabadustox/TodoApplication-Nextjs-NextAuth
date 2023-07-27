@@ -27,8 +27,9 @@ const Signup = () => {
           password,
         }),
       });
-      res.status === 200 &&
-        router.push("/dashboard/login?success=User Created");
+      res.status === 200
+        ? router.push("/dashboard/login?success=User Created")
+        : setError(true);
     } catch (err) {
       setError(true);
     }
@@ -47,8 +48,8 @@ const Signup = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSignup}>
+    <form onSubmit={handleSignup}>
+      <div className="flex flex-col items-center my-4">
         <input
           type="text"
           placeholder="username"
@@ -74,10 +75,10 @@ const Signup = () => {
         />
 
         <button>SignUp</button>
-      </form>
-      {error && "Error"}
-      <Link href="/dashboard/login">Already have an Account?</Link>
-    </div>
+        {error ? "eRROr" : "ASSA"}
+        <Link href="/dashboard/login">Already have an Account?</Link>
+      </div>
+    </form>
   );
 };
 

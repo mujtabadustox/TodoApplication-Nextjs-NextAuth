@@ -5,12 +5,18 @@
 
 
 .container {
-  min-height: 100vh;
+  /* min-height: 100vh;
   max-width: 1366px;
   margin: 0 auto;
   padding: 0 60px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; */
   
 
 }
+
+/* body {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+} */
