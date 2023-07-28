@@ -37,28 +37,37 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div className="flex flex-col items-center my-4">
+    <form onSubmit={handleLogin} className="flex gap-2 flex-col">
+      <div className="flex flex-col items-center my-4 gap-2">
+        <header className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl">Login</h1>
+        </header>
         <input
           type="email"
-          placeholder="email"
+          placeholder="Email"
           value={email}
           onChange={handleEmail}
           required
+          className="border border-slate-300 bg-transparent rounded px-2 py-1 outline-none focus-within:border-slate-100"
         />
 
         <input
           type="password"
-          placeholder="password"
+          placeholder="Password"
           value={password}
           onChange={handlePassword}
           required
+          className="border border-slate-300 bg-transparent rounded px-2 py-1 outline-none focus-within:border-slate-100"
         />
 
-        <button>Login</button>
+        <button className="border border-slate-300 bg-amber-500 text-white active:bg-amber-600 rounded px-2 py-1 outline-none focus-within:border-slate-100">
+          Login
+        </button>
 
         {error && "Error"}
-        <Link href="/dashboard/signup">Dont have an account?</Link>
+        <Link href="/dashboard/signup" className="underline">
+          Dont have an Account?
+        </Link>
       </div>
     </form>
   );
