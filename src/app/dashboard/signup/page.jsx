@@ -76,7 +76,7 @@ const Signup = () => {
       )}
       <div className="flex flex-col items-center my-4 gap-2">
         <header className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl">Signup</h1>
+          <h1 className="text-4xl text-[#7c6f5a]">Signup</h1>
         </header>
         <input
           type="text"
@@ -105,8 +105,8 @@ const Signup = () => {
           className="border border-slate-300 bg-transparent rounded px-2 py-1 outline-none focus-within:border-slate-100"
         />
 
-        <button className="border border-slate-300 bg-amber-500 text-white active:bg-amber-600 rounded px-2 py-1 outline-none focus-within:border-slate-100">
-          SignUp
+        <button className="border border-slate-300 min-w-[100px] bg-[#7c6f5a]/80 text-white active:bg-[#7c6f5a] rounded-lg px-2 py-1 outline-none focus-within:border-slate-100">
+          Signup
         </button>
         {error && "Error"}
         <Link href="/dashboard/login" className="underline">
