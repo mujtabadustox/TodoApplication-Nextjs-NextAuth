@@ -18,7 +18,7 @@ const Navbar = () => {
         {session && session.status === "authenticated" && (
           <button
             onClick={signOut}
-            className="border border-slate-300 bg-amber-500 text-white active:bg-amber-600 rounded outline-none focus-within:border-slate-100"
+            className="border border-slate-300 w-[100px] bg-[#5A5A5A] text-white active:bg-[#5a5959] rounded outline-none focus-within:border-slate-100"
           >
             Logout
           </button>

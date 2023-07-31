@@ -6,11 +6,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 import useSWR from "swr";
+import { requestToBodyStream } from "next/dist/server/body-streams";
 
 const Dashboard = () => {
   const session = useSession();
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [isClicked, setIsClicked] = useState({});
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -76,36 +78,43 @@ const Dashboard = () => {
     }
   };
 
+  const handleCollapsed = (id) => {
+    setIsClicked((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
   if (session.status === "authenticated") {
     return (
       <div className="flex flex-col gap-8">
         <div className="flex justify-center">
           <Image
             src="/assets/images/profile.jpg"
-            width={150}
-            height={150}
+            width={100}
+            height={200}
             alt="avatar"
-            className="rounded-full border-2 border-white w-[150px] h-[150px]"
+            className="rounded-full border-4 border-[#7c6f5a] w-[150px] h-[150px]"
           />
         </div>
         <div>
           <form onSubmit={handleTodo} className="flex gap-2 flex-col">
-            <div className="flex relative items-center border border-slate-300 bg-white rounded">
+            <div className="flex relative items-center border border-transparent rounded bg-white">
               <input
                 type="text"
                 placeholder="Add New Task"
                 value={title}
                 onChange={handleTitle}
-                className="flex-grow px-2 py-1 outline-none focus-within:border-slate-100"
+                className="flex-grow px-2 py-1 outline-none rounded focus-within:border-slate-100"
               />
               <button type="submit">
-                <div className="border border-slate-300 bg-amber-600 rounded w-6 h-6 text-slate-700 absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer">
+                <div className="border border-transparent bg-[#7c6f5a]/100 absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
-                    stroke="#7c6f5a"
+                    stroke="#5A5A5A"
                     className="w-6 h-6"
                   >
                     <path
@@ -119,15 +128,15 @@ const Dashboard = () => {
             </div>
           </form>
         </div>
-        <div className="flex items-center justify-between border-2 h-16 bg-amber-600 bg-opacity-90 text-white px-4">
-          <button onClick={() => handleUpdate(todo._id)}>
+        <div className="flex items-center justify-between border-2 h-16 rounded bg-[#7c6f5a] bg-opacity-90 text-white px-4">
+          <button>
             <div className="w-6 h-6 mr-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                stroke="#867963"
+                stroke="#5A5A5A"
                 className="w-6 h-6"
               >
                 <path
@@ -145,7 +154,7 @@ const Dashboard = () => {
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke="#7c6f5a"
+              stroke="#5A5A5A"
             >
               <path
                 strokeLinecap="round"
@@ -155,72 +164,78 @@ const Dashboard = () => {
             </svg>
           </div>
         </div>
-        <div className="flex flex-col gap-1 min-w-[300px] border bordr-gray-800 rouded-md p-4">
-          {isLoading
-            ? "Loading..."
-            : data?.map((todo) => (
-                <div key={todo._id}>
-                  <div className="flex items-center justify-between bg-gray-200 p-4 rounded-lg">
-                    <div className="flex items-center">
-                      <div
-                        className="w-6 h-6 mr-2 cursor-pointer"
-                        onClick={handleUpdate}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <h1 className="text-lg font-bold text-gray-900">
-                        {todo.title}
-                      </h1>
-                    </div>
+        <div className="flex flex-col max-w-[600px] ">
+          {isLoading ? (
+            "Loading..."
+          ) : data.length === 0 ? (
+            <div className="flex items-center justify-center bg-gray-300/70 p-4 gap-4 rounded-t min-w-[400px] min-h-[250px] rounded">
+              <div className="flex items-center border-1 border-transparent">
+                <h1 className="">No Task Today</h1>
+              </div>
+            </div>
+          ) : (
+            data?.map((todo) => (
+              <div key={todo._id}>
+                <div className="flex items-center justify-between bg-gray-300 p-4 gap-4 rounded-t min-w-[500px]">
+                  <div className="flex items-center border-1 border-transparent">
                     <div
-                      className="w-6 h-6 ml-2  cursor-pointer"
-                      // onClick={handleRightButtonClick}
+                      className="w-6 h-6 mr-2 cursor-pointer"
+                      onClick={() => handleUpdate(todo._id)}
                     >
-                      {" "}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        stroke="#A49377"
+                        fill={todo.complete ? "#A49377" : "none"}
                         viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        fill="#A49377"
-                        className="w-6 h-6"
                       >
                         <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.54 8.31a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM6.46 8.31a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM17.54 20.61a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM6.46 20.61a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92z"
+                          fillRule="evenodd"
+                          d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                          clipRule="evenodd"
                         />
                       </svg>
                     </div>
+                    <h1 className="text-lg text-gray-900">{todo.title}</h1>
                   </div>
-                  <div>
-                    <p>
-                      Completed: {todo.complete === true ? "True" : "False"}
-                    </p>
-                    <p>Created At: {todo?.createdAt}</p>
-                    <button
-                      className="border border-slate-300 bg-amber-500 text-white active:bg-amber-600 rounded px-2 py-1 outline-none focus-within:border-slate-100"
-                      onClick={() => handleDelete(todo._id)}
+                  <div
+                    className="w-6 h-6 ml-2 cursor-pointer"
+                    onClick={() => handleCollapsed(todo._id)}
+                  >
+                    {" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      fill="#A49377"
+                      className="w-6 h-6"
                     >
-                      Delete
-                    </button>
-                    <button
-                      className="border border-slate-300 bg-amber-500 text-white active:bg-amber-600 rounded px-2 py-1 outline-none focus-within:border-slate-100"
-                      onClick={() => handleUpdate(todo._id)}
-                    >
-                      Update
-                    </button>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.54 8.31a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM6.46 8.31a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM17.54 20.61a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92zM6.46 20.61a2.46 2.46 0 100-4.92 2.46 2.46 0 000 4.92z"
+                      />
+                    </svg>
                   </div>
                 </div>
-              ))}
+                {isClicked[todo._id] === true && (
+                  <div className="flex bg-gray-200 rounded-b">
+                    <div className="p-4">
+                      <p>
+                        Completed: {todo.complete === true ? "True" : "False"}
+                      </p>
+                      <p>Created At: {todo?.createdAt}</p>
+                      <button
+                        className="border min-w-[480px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
+                        onClick={() => handleDelete(todo._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     );
