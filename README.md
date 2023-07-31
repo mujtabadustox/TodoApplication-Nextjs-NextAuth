@@ -15,6 +15,9 @@ To delete the task, First Expand and click on Delete
 
 npm install to install the dependancies
 
+//Signup
+
+--Make sure username and email is unique 
 
 
 ///////////////////////////////////////////
