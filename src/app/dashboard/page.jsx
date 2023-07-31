@@ -276,7 +276,7 @@ const Dashboard = () => {
                     <div className="p-4">
                       <p>
                         <strong>Completed:</strong>{" "}
-                        {todo.complete === true ? "True" : "False"}
+                        {todo.complete === true ? "Completed" : "Not Completed"}
                       </p>
                       <p>
                         <strong>Created At:</strong>{" "}
