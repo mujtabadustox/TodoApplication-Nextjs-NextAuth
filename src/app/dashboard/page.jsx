@@ -227,7 +227,7 @@ const Dashboard = () => {
             data?.map((todo, index) => (
               <div key={todo._id} className="mb-0.5">
                 <div
-                  className={`flex items-center justify-between bg-gray-300 p-4 gap-4 min-w-[400px] ${
+                  className={`flex items-center justify-between border border-[#A49377]/40 bg-gray-300 p-4 gap-4 min-w-[400px] ${
                     index === 0 ? "rounded-t-lg" : ""
                   }`}
                 >
@@ -283,7 +283,7 @@ const Dashboard = () => {
                         {changeDate(todo?.createdAt)}
                       </p>
                       <button
-                        className="border min-w-[380px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
+                        className="border min-w-[370px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
                         onClick={() => handleDelete(todo._id)}
                       >
                         Delete
