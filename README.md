@@ -1,3 +1,28 @@
+It is a simple todo application, Which allows adding, deleting, and updating the Tasks
+
+To Add, Fill out the input field and Click + Icon
+
+To Expand the details, Click on Accordion Icon
+
+To update click on the Tick Icon
+
+Filled Tick = Completed
+Unfilled = Not Completed
+
+To delete the task, First Expand and click on Delete
+
+//To Run the project
+
+npm install to install the dependancies
+
+//Signup
+
+--Make sure username and email is unique 
+
+
+///////////////////////////////////////////
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
