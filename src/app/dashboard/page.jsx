@@ -12,6 +12,7 @@ const Dashboard = () => {
   const session = useSession();
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isClicked, setIsClicked] = useState({});
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json());
@@ -48,6 +49,14 @@ const Dashboard = () => {
           complete: false,
         }),
       });
+      setErrorMessage({
+        msg: `Added New Todo`,
+        type: "success",
+      });
+
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
       mutate();
     } catch (err) {
       console.error(err);
@@ -61,6 +70,14 @@ const Dashboard = () => {
       await fetch(`/api/todos/${id}`, {
         method: "DELETE",
       });
+      setErrorMessage({
+        msg: `Deleted Todo`,
+        type: "success",
+      });
+
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
       mutate();
     } catch (err) {
       throw new Error("Error");
@@ -85,37 +102,71 @@ const Dashboard = () => {
     }));
   };
 
+  const changeDate = (str) => {
+    const date = new Date(str);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    // Convert hours to 12-hour format
+    hours = hours % 12;
+    hours = hours === 0 ? 12 : hours;
+
+    const newDate = `${month.toString().padStart(2, "0")}/${day
+      .toString()
+      .padStart(2, "0")}/${year} ${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")} ${ampm}`;
+
+    return newDate;
+  };
+
   if (session.status === "authenticated") {
     return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6 max-w-[400px]">
+        {errorMessage && (
+          <div
+            className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative"
+            role="alert"
+          >
+            <strong class="font-bold">Sucess! </strong>
+            <span class="block sm:inline">{errorMessage.msg}</span>
+          </div>
+        )}
         <div className="flex justify-center">
           <Image
             src="/assets/images/profile.jpg"
             width={100}
             height={200}
             alt="avatar"
-            className="rounded-full border-4 border-[#7c6f5a] w-[150px] h-[150px]"
+            className="rounded-full border-4 border-gray-400/40 w-[150px] h-[150px]"
           />
         </div>
         <div>
           <form onSubmit={handleTodo} className="flex gap-2 flex-col">
-            <div className="flex relative items-center border border-transparent rounded bg-white">
+            <div className="flex relative items-center border border-transparent rounded-lg bg-white">
               <input
                 type="text"
                 placeholder="Add New Task"
                 value={title}
                 onChange={handleTitle}
-                className="flex-grow px-2 py-1 outline-none rounded focus-within:border-slate-100"
+                className="flex-grow px-2 py-1 min-h-[50px] outline-none rounded focus-within:border-slate-100"
               />
               <button type="submit">
-                <div className="border border-transparent bg-[#7c6f5a]/100 absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer">
+                <div className="border border-transparent bg-[#7c6f5a]/80 absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
-                    stroke="#5A5A5A"
-                    className="w-6 h-6"
+                    stroke="#7c6f5a"
+                    className="w-8 h-8"
                   >
                     <path
                       strokeLinecap="round"
@@ -128,25 +179,24 @@ const Dashboard = () => {
             </div>
           </form>
         </div>
-        <div className="flex items-center justify-between border-2 h-16 rounded bg-[#7c6f5a] bg-opacity-90 text-white px-4">
-          <button>
-            <div className="w-6 h-6 mr-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#5A5A5A"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
-                />
-              </svg>
-            </div>
-          </button>
+        <div className="flex items-center justify-between border-2 h-16 rounded-lg bg-[#7c6f5a] bg-opacity-90 text-white px-4">
+          <div className="w-6 h-6 mr-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="#5A5A5A"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
+              />
+            </svg>
+          </div>
+
           <h1 className="text-left">Your Todos</h1>
           <div className="w-6 h-6 ml-2 ">
             <svg
@@ -168,15 +218,19 @@ const Dashboard = () => {
           {isLoading ? (
             "Loading..."
           ) : data.length === 0 ? (
-            <div className="flex items-center justify-center bg-gray-300/70 p-4 gap-4 rounded-t min-w-[400px] min-h-[250px] rounded">
+            <div className="flex items-center justify-center bg-gray-300/70 p-4 gap-4 rounded-t-lg min-w-[400px] min-h-[250px] rounded">
               <div className="flex items-center border-1 border-transparent">
                 <h1 className="">No Task Today</h1>
               </div>
             </div>
           ) : (
-            data?.map((todo) => (
-              <div key={todo._id}>
-                <div className="flex items-center justify-between bg-gray-300 p-4 gap-4 rounded-t min-w-[500px]">
+            data?.map((todo, index) => (
+              <div key={todo._id} className="mb-0.5">
+                <div
+                  className={`flex items-center justify-between bg-gray-300 p-4 gap-4 min-w-[400px] ${
+                    index === 0 ? "rounded-t-lg" : ""
+                  }`}
+                >
                   <div className="flex items-center border-1 border-transparent">
                     <div
                       className="w-6 h-6 mr-2 cursor-pointer"
@@ -218,19 +272,24 @@ const Dashboard = () => {
                   </div>
                 </div>
                 {isClicked[todo._id] === true && (
-                  <div className="flex bg-gray-200 rounded-b">
+                  <div className="flex flex-col bg-gray-200 rounded-b-lg mt-0.5">
                     <div className="p-4">
                       <p>
-                        Completed: {todo.complete === true ? "True" : "False"}
+                        <strong>Completed:</strong>{" "}
+                        {todo.complete === true ? "True" : "False"}
                       </p>
-                      <p>Created At: {todo?.createdAt}</p>
+                      <p>
+                        <strong>Created At:</strong>{" "}
+                        {changeDate(todo?.createdAt)}
+                      </p>
                       <button
-                        className="border min-w-[480px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
+                        className="border min-w-[380px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
                         onClick={() => handleDelete(todo._id)}
                       >
                         Delete
                       </button>
                     </div>
+                    <div className="bg-gray-300 rounded-b-lg min-w-[400px] min-h-[10px]"></div>
                   </div>
                 )}
               </div>
