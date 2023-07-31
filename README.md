@@ -7,7 +7,7 @@ To Expand the details, Click on Accordion Icon
 To update click on the Tick Icon
 
 Filled Tick = Completed
-Unfillsd = Not Completed
+Unfilled = Not Completed
 
 To delete the task, First Expand and click on Delete
 
