@@ -143,7 +143,7 @@ const Dashboard = () => {
           <Image
             src="/assets/images/profile.jpg"
             width={100}
-            height={200}
+            height={100}
             alt="avatar"
             className="rounded-full border-4 border-gray-400/40 w-[150px] h-[150px]"
           />
@@ -218,7 +218,7 @@ const Dashboard = () => {
           {isLoading ? (
             "Loading..."
           ) : data.length === 0 ? (
-            <div className="flex items-center justify-center bg-gray-300/70 p-4 gap-4 rounded-t-lg min-w-[400px] min-h-[250px] rounded">
+            <div className="flex items-center justify-center bg-gray-300/70 p-4 gap-4 rounded-t-lg min-w-[350px] min-h-[250px] rounded">
               <div className="flex items-center border-1 border-transparent">
                 <h1 className="">No Task Today</h1>
               </div>
@@ -227,7 +227,7 @@ const Dashboard = () => {
             data?.map((todo, index) => (
               <div key={todo._id} className="mb-0.5">
                 <div
-                  className={`flex items-center justify-between border border-[#A49377]/40 bg-gray-300 p-4 gap-4 min-w-[400px] ${
+                  className={`flex items-center justify-between border border-[#A49377]/40 bg-gray-300 p-4 gap-4 min-w-[350px] ${
                     index === 0 ? "rounded-t-lg" : ""
                   }`}
                 >
@@ -283,13 +283,13 @@ const Dashboard = () => {
                         {changeDate(todo?.createdAt)}
                       </p>
                       <button
-                        className="border min-w-[370px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
+                        className="border min-w-[325px] border-transparent bg-red-300 text-red-600 active:bg-red-400 rounded px-2 py-1 outline-none focus-within:border-slate-100"
                         onClick={() => handleDelete(todo._id)}
                       >
                         Delete
                       </button>
                     </div>
-                    <div className="bg-gray-300 rounded-b-lg min-w-[400px] min-h-[10px]"></div>
+                    <div className="bg-gray-300 rounded-b-lg min-w-[350px] min-h-[10px]"></div>
                   </div>
                 )}
               </div>
