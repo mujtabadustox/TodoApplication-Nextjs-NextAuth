@@ -6,7 +6,8 @@ To Expand the details, Click on Accordion Icon
 
 To update click on the Tick Icon
 
-Filled Tick = Completed
+Filled Tick = Completed,
+
 Unfilled = Not Completed
 
 To delete the task, First Expand and click on Delete
@@ -15,13 +16,13 @@ To delete the task, First Expand and click on Delete
 
 npm install to install the dependancies
 
+npm run dev // to run
+
 //Signup
 
---Make sure username and email is unique 
-
+--Make sure username and email is unique
 
 ///////////////////////////////////////////
-
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
